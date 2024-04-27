@@ -7,7 +7,7 @@
 - [Abstract](#Abstract)
 - [Transcriptome pipeline](#Transcriptome-pipeline)
   - [Requirements](#Requirements)
-    - [Step 1: download and build libisal](#step-1-download-and-build-libisal)
+    - [Step 1: download and install miniconda](#step-1-download-and-install-miniconda)
     - [step 2: download and build libdeflate](#step-2-download-and-build-libdeflate)
     - [Step 3: download and build fastp](#step-3-download-and-build-fastp)
 - [Bugs](#Bugs)
@@ -22,6 +22,9 @@ Long noncoding RNAs (lncRNAs) are versatile RNA molecules recently identified as
 ## Requirements
 * Internet access;
 * Python installed (> 3.10) - https://www.python.org/
+
+### Step 1: download and install miniconda
+Please, see https://docs.anaconda.com/free/miniconda/index.html
 
 # Bugs
 Do you have an issue? Please file it on :https://github.com/rogergsilva/structurally-identical-lncrnas/issues
