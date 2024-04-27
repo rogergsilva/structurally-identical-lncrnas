@@ -1,7 +1,7 @@
 # The hidden hot world of long non-coding RNAs in Thermophilic Fungus: a robust computational pipeline.
 
 <p align="center">
-  <img src="https://github.com/rogergsilva/structurally-identical-lncrnas/blob/master/images/image16.jpg" width="350" alt="Structurally identical tanscripts">
+  <img src="https://github.com/rogergsilva/structurally-identical-lncrnas/tree/main/images/image16.jpg" width="350" alt="Structurally identical tanscripts">
 </p>
 
 # Abstract
