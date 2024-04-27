@@ -8,7 +8,7 @@
 - [Transcriptome pipeline](#Transcriptome-pipeline)
   - [Requirements](#Requirements)
     - [Step 1: download and install miniconda](#step-1-download-and-install-miniconda)
-    - [step 2: download and build libdeflate](#step-2-download-and-build-libdeflate)
+    - [Step 2: setting up bioconda channels](#step-2-setup-bioconda-channels)
     - [Step 3: download and build fastp](#step-3-download-and-build-fastp)
 - [Bugs](#Bugs)
 - [Citation](#Citation)
