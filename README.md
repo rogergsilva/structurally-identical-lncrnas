@@ -26,6 +26,10 @@ Long noncoding RNAs (lncRNAs) are versatile RNA molecules recently identified as
 ### Step 1: download and install miniconda
 Please, see https://docs.anaconda.com/free/miniconda/index.html
 
+### Step 2: setup bioconda channels
+After having installed miniconda, you will need to set up the bioconda channels.
+Follow the Usage steps on https://bioconda.github.io/
+
 # Bugs
 Do you have an issue? Please file it on :https://github.com/rogergsilva/structurally-identical-lncrnas/issues
 
