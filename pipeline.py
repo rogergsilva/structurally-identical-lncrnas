@@ -13,6 +13,8 @@ import subprocess
 import tempfile as tmp
 
 # Global variables
+# Prefix for creating the conda environment
+ENV = 'lncrna'
 # Defining directories
 WORK_DIR='/home/roger/Documents/UFMG/validation/test/'
 TOOL_DIR = WORK_DIR + 'tool/'
@@ -78,10 +80,6 @@ def call_variables(dir_path, types):
 def run(env, cmd):
     print('CMD', cmd)
     result = subprocess.call('conda run -n ' + env + ' ' + cmd, shell=True)
-
-def check_package():
-    None
-
 
 def clean(param):
     print('Running the cleaning process...')
@@ -215,6 +213,24 @@ def call_directory():
             os.makedirs(folder)
 
     return None
+
+def call_install_packages():
+    '''
+    Download all necessary packages using bioconda commands.
+    '''
+
+    # First, create the conda enviroment
+    print(f'Creating conda env {ENV}')
+    cmd = f"conda create --name {ENV} -y"
+    result = subprocess.call(cmd, shell=True)
+    print(result)
+
+    packages = ['sra-tools','bbmap']
+    print(f'Installing conda packages: {ENV}')
+    cmd = f"conda install " + " ".join(packages) + " -y"
+    run(ENV, cmd)
+
+    None
 
 def call_clean():
     typ = '.fastq.gz'
@@ -378,6 +394,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Options of finding lncRNA pipeline")
     parser.add_argument('-f','--folders', action='store_true', help='Create folder tree for the pipeline')
+    parser.add_argument('-p','--packages', action='store_true', help='Install all necessary packages')
     parser.add_argument('-c','--clean', action='store_true', help='Clean raw reads')
     parser.add_argument('-d','--decont', action='store_true', help='Decontamination of raw reads')
     parser.add_argument('-i','--hisat', action='store_true', help='Run Hisat')
@@ -396,6 +413,9 @@ if __name__ == "__main__":
 
     if args.folders:
         call_directory()
+
+    if args.packages:
+        call_install_packages()
 
     if args.clean:
         call_clean()
