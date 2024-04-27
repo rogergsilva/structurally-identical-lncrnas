@@ -5,7 +5,7 @@
 </p>
 
 - [Abstract](#Abstract)
-- [Transcriptome pipeline](#Transcriptome pipeline)
+- [Transcriptome pipeline](#Transcriptome-pipeline)
   - [install with Bioconda](#install-with-bioconda)
     - [Step 1: download and build libisal](#step-1-download-and-build-libisal)
     - [step 2: download and build libdeflate](#step-2-download-and-build-libdeflate)
