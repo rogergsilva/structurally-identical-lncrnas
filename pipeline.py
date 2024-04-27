@@ -42,8 +42,6 @@ O_ASMCO = WORK_DIR + 'output/stringTie/coverage'
 O_ASMTR = WORK_DIR + 'output/stringTie/track'
 O_SALM  = WORK_DIR + 'output/salmon/'
 O_QUAS  = WORK_DIR + 'output/rnaquast/'
-#O_FILT  = WORK_DIR + 'output/filter/'
-#O_STAR  = WORK_DIR + 'output/star/'
 O_BLAST = WORK_DIR + 'output/blast/'
 
 # Quality trimming sides - r: right only and l: left only or rl = both sides
@@ -407,9 +405,13 @@ if __name__ == "__main__":
     parser.add_argument('-l','--salmon', action='store_true', help='Run salmon to find out library strandess')
     parser.add_argument('-dg','--debug', action='store_true', help='Debug variables')
     parser.add_argument('-q','--quast', action='store_true', help='Run RNAQuast on each transcriptome')
+    parser.add_argument('-b','--about', action='store_true', help='Execute the pipeline for the first time')
 
 
     args = parser.parse_args()
+
+    if args.about:
+        print('Transcriptome assembly pipeline - version: 1.3')
 
     if args.folders:
         call_directory()

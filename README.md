@@ -23,12 +23,32 @@ Long noncoding RNAs (lncRNAs) are versatile RNA molecules recently identified as
 * Internet access;
 * Python installed (> 3.10) - https://www.python.org/
 
-### Step 1: download and install miniconda
+### Step 1: Download and install miniconda
 Please, see https://docs.anaconda.com/free/miniconda/index.html
 
-### Step 2: setup bioconda channels
+### Step 2: Setup bioconda channels
 After having installed miniconda, you will need to set up the bioconda channels.
 Follow the Usage steps on https://bioconda.github.io/
+
+### Step 3: Create a folder for your project in your computer
+Create a folder in your computer where you will carry out your in-silico experiments.
+For example, if your project will name PRJ123, you will execute the following command:
+Linux operation system
+```shell
+mkdir PRJ123
+```
+### Step 4: Download the pipeline script file
+Download the file pipeline.py from the Github and save it in the folder you have created. 
+For example, save it in the folder PRJ123.
+
+### Step 5: Testing the pipeline script file
+Open a command line terminal, change the path to the folder PRJ123 and execute the following command:
+```shell
+python pipeline.py --about
+```
+If you see something like: Transcriptome assembly pipeline - version X
+
+### Step 6: Create tree of folders
 
 # Bugs
 Do you have an issue? Please file it on :https://github.com/rogergsilva/structurally-identical-lncrnas/issues
