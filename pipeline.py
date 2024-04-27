@@ -14,17 +14,16 @@ import tempfile as tmp
 
 # Global variables
 # Defining directories
-WORK_DIR='/home/roger/Documents/UFMG/validation/PRJNA553580/'
+WORK_DIR='/home/roger/Documents/UFMG/validation/test/'
 TOOL_DIR = WORK_DIR + 'tool/'
 OUT_DIR = WORK_DIR + 'output/'
 
 # Resource directories
 R_ADAP = WORK_DIR + 'resources/adapters/'
 R_GENO = WORK_DIR + 'resources/genome/GCF_902167145.1/'
-R_HIDX = WORK_DIR + 'output/index/'
 
 # Hisat Index directory
-R_HIDXN = WORK_DIR + 'resources/index/hisat_n/'
+R_HIDX = WORK_DIR + 'output/index/'
 
 R_RAWR = WORK_DIR + 'resources/raw/'
 R_RNAS = WORK_DIR + 'resources/rRNA/'
@@ -35,10 +34,14 @@ O_CLEAN = WORK_DIR + 'output/clean/'
 O_DECON = WORK_DIR + 'output/decont/'
 O_ALIGN = WORK_DIR + 'output/hisat/'
 O_ASSEM = WORK_DIR + 'output/stringTie/'
+O_ASMEM = WORK_DIR + 'output/stringTie/merge'
+O_ASMAB = WORK_DIR + 'output/stringTie/abundance'
+O_ASMCO = WORK_DIR + 'output/stringTie/coverage'
+O_ASMTR = WORK_DIR + 'output/stringTie/track'
 O_SALM  = WORK_DIR + 'output/salmon/'
 O_QUAS  = WORK_DIR + 'output/rnaquast/'
-O_FILT  = WORK_DIR + 'output/filter/'
-O_STAR  = WORK_DIR + 'output/star/'
+#O_FILT  = WORK_DIR + 'output/filter/'
+#O_STAR  = WORK_DIR + 'output/star/'
 O_BLAST = WORK_DIR + 'output/blast/'
 
 # Quality trimming sides - r: right only and l: left only or rl = both sides
@@ -75,6 +78,10 @@ def call_variables(dir_path, types):
 def run(env, cmd):
     print('CMD', cmd)
     result = subprocess.call('conda run -n ' + env + ' ' + cmd, shell=True)
+
+def check_package():
+    None
+
 
 def clean(param):
     print('Running the cleaning process...')
@@ -195,6 +202,19 @@ def index(param):
     cmd = f"hisat2-build --ss {param['out_h']}ss.exon.txt --exon {param['out_h']}exon.exon.txt -f {param['geno']}  {param['out_h']}T.thermophilus"
     run('phd', cmd)
 
+
+def call_directory():
+    import os
+    '''
+    If the folder does not exit, create it!
+    '''
+    dirs = [TOOL_DIR, R_ADAP, R_GENO, R_HIDX, R_RAWR, R_RNAS, O_CLEAN,O_DECON, O_SALM, O_QUAS, O_ASMEM, O_ASMAB, O_ASMCO, O_ASMTR]
+    for folder in dirs:
+        if not os.path.exists(folder):
+            print(f'Creating directory {folder}')
+            os.makedirs(folder)
+
+    return None
 
 def call_clean():
     typ = '.fastq.gz'
@@ -357,6 +377,7 @@ if __name__ == "__main__":
             raise argparse.ArgumentTypeError(f'Path: {path} is not a valid path')
 
     parser = argparse.ArgumentParser(description="Options of finding lncRNA pipeline")
+    parser.add_argument('-f','--folders', action='store_true', help='Create folder tree for the pipeline')
     parser.add_argument('-c','--clean', action='store_true', help='Clean raw reads')
     parser.add_argument('-d','--decont', action='store_true', help='Decontamination of raw reads')
     parser.add_argument('-i','--hisat', action='store_true', help='Run Hisat')
@@ -373,9 +394,12 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    if args.folders:
+        call_directory()
+
     if args.clean:
         call_clean()
-  
+
     if args.decont:
         call_decont()
 
