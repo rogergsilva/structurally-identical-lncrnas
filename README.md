@@ -44,11 +44,17 @@ For example, save it in the folder PRJ123.
 ### Step 5: Testing the pipeline script file
 Open a command line terminal, change the path to the folder PRJ123 and execute the following command:
 ```shell
+cd PRJ123
 python pipeline.py --about
 ```
 If you see something like: Transcriptome assembly pipeline - version X
 
-### Step 6: Create tree of folders
+### Step 6: Creating required folders
+On the command line terminal, change the path to the folder PRJ123 and execute the following command:
+```shell
+cd PRJ123
+python pipeline.py --about
+```
 
 # Bugs
 Do you have an issue? Please file it on :https://github.com/rogergsilva/structurally-identical-lncrnas/issues

@@ -16,7 +16,7 @@ import tempfile as tmp
 # Prefix for creating the conda environment
 ENV = 'lncrna'
 # Defining directories
-WORK_DIR='/home/roger/Documents/UFMG/validation/test/'
+WORK_DIR=os.getcwd() + '/'
 TOOL_DIR = WORK_DIR + 'tool/'
 OUT_DIR = WORK_DIR + 'output/'
 
@@ -82,12 +82,12 @@ def run(env, cmd):
 def clean(param):
     print('Running the cleaning process...')
     cmd = f"bbduk.sh threads={param['workers']} in1={param['r1']} in2={param['r2']} out1={param['out_r1']} out2={param['out_r2']} ref={param['adapters']} ktrim=r hdist=1 tpe tbo qtrim={param['qtrim']} trimq={param['trimq']} minlen={param['minlen']} outm={param['discarted']} stats={param['stats']} bhist={param['summary']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
 def decont(param):
     print('Running decontamination process...')
     cmd = f"bbduk.sh threads={param['workers']} in1={param['r1']} in2={param['r2']} out1={param['out_r1']} out2={param['out_r2']} ref={param['rnas']} k=27 stats={param['stats']} &>> {param['output']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
 def hisat(param):
     print('Running HISAT2 alignment process...')
@@ -95,19 +95,19 @@ def hisat(param):
     c2 = f"-1 {param['r1']} -2 {param['r2']} -S {param['sam']} --un {param['unpair']} --al {param['unalig']} "
     c3 = f"--summary-file {param['summary']}"
     cmd = c1 + c2 + c3
-    run('validation', cmd)
+    run('hot', cmd)
     
     print('Sorting BAM files...')
     cmd = f"samtools sort -@ 6 -O bam {param['sam']} -o {param['sort']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
     print('Creating Index files...')
     cmd = f"samtools index {param['sort']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
     print('Removing SAM file...')
     cmd = f"rm {param['sam']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
 def stringtie(param):
     """
@@ -118,7 +118,7 @@ def stringtie(param):
     print('Running StringTie assembly process...')
     # https://ccb.jhu.edu/software/stringtie/index.shtml?t=manual
     cmd = f"stringtie -j 5 -c 5 --{param['strand']} -C {param['cover']} -p {param['workers']} -v -m {param['lncrna']} -o {param['gtf']} -G {param['anot']} {param['sort']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
 def merge(param):
     """ 
@@ -134,51 +134,51 @@ def merge(param):
 
     print('Creating directories...')
     cmd = f"mkdir {O_ASSEM}abundance {O_ASSEM}merge {O_ASSEM}track"
-    run('validation', cmd)
+    run('hot', cmd)
 
     cmd = f"stringtie --merge -m 200 -p {param['workers']} -G {param['anot']} -o {param['gtf_all']} {f_tmp.name}"
-    run('validation', cmd)
+    run('hot', cmd)
 
     print('Evaluating transcriptome assembly process...')
     cmd = f"gffcompare -V --debug -r {param['anot']} -o {param['out']} {param['gtf_all']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
     print('Tracking identical transcripts...')
     cmd = f"gffcompare -V --debug -r {param['anot']} -o {param['out_trk']} -i {f_tmp.name}"
-    run('validation', cmd)
+    run('hot', cmd)
 
     print('Extracting fasta files from tracking transcripts process...')
     cmd = f"gffread -W -F -w {param['fasta_trk']} -g {param['geno']} {param['gtf_trk']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
     print('Extracting fasta files from transcripts process...')
     cmd = f"gffread -W -F -w {param['fasta_mer']} -g {param['geno']} {param['gtf_all']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
     print('Joining transcripts names - easier identification...')
     cmd = f"{TOOL_DIR}/mstrg_prep.pl {param['gtf_all']} > {param['gtf_out']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
 
 def abundace(param):
     print('Measuring transcript abundance...')
     cmd = f"stringtie -e -B -p {param['workers']} -G {param['gtf_out']} -A {param['abund']} -o {param['trans']} {param['bam']}"
-    run('validation', cmd)
+    run('hot', cmd)
 
 def salmon(param):
     print('Running salmon to find strandedness...')
     cmd = f"salmon quant -i {param['idx']} -l A -1 {param['r1']} -2 {param['r2']} -g {param['anot']} -p 4 --gcBias --validateMappings --numGibbsSamples 200 --seqBias -o {param['output']}"
-    run('salmon', cmd)
+    run('hot', cmd)
 
 def rnaquast(param):
     print('Running rnaQUAST quality...')
     cmd = f"{TOOL_DIR}/rnaQUAST-2.2.2/rnaQUAST.py --transcripts {param['fasta']} --reference {param['geno']} --gtf {param['gff']} -o {param['output']}"
-    run('rnaquast', cmd)
+    run('hot', cmd)
 
 def check_size(param):
     print('Checking sizes')
     cmd = '#!/bin/bash; for file in *sorted.bam; do echo $(samtools view -F 4 $file |head -n 1000000|cut -f 10|sort -n| wc -c)/1000000|bc done'
-    run('phd', cmd)
+    run('hot', cmd)
 
 def index(param):
     """
@@ -186,17 +186,17 @@ def index(param):
     """
     print('Generating salmon index...')
     cmd = f"salmon index -t {param['cdna']} -i {param['out_l']}"
-    run('phd', cmd)
+    run('hot', cmd)
 
     print('Generating HISAT2 index...')
     cmd = f"hisat2_extract_splice_sites.py {param['ano_h']} > {param['out_h']}ss.exon.txt"
-    run('phd', cmd)
+    run('hot', cmd)
 
     cmd = f"hisat2_extract_exons.py {param['ano_h']} > {param['out_h']}exon.exon.txt"
-    run('phd', cmd)
+    run('hot', cmd)
 
     cmd = f"hisat2-build --ss {param['out_h']}ss.exon.txt --exon {param['out_h']}exon.exon.txt -f {param['geno']}  {param['out_h']}T.thermophilus"
-    run('phd', cmd)
+    run('hot', cmd)
 
 
 def call_directory():
@@ -211,24 +211,6 @@ def call_directory():
             os.makedirs(folder)
 
     return None
-
-def call_install_packages():
-    '''
-    Download all necessary packages using bioconda commands.
-    '''
-
-    # First, create the conda enviroment
-    print(f'Creating conda env {ENV}')
-    cmd = f"conda create --name {ENV} -y"
-    result = subprocess.call(cmd, shell=True)
-    print(result)
-
-    packages = ['sra-tools','bbmap']
-    print(f'Installing conda packages: {ENV}')
-    cmd = f"conda install " + " ".join(packages) + " -y"
-    run(ENV, cmd)
-
-    None
 
 def call_clean():
     typ = '.fastq.gz'
@@ -392,7 +374,6 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Options of finding lncRNA pipeline")
     parser.add_argument('-f','--folders', action='store_true', help='Create folder tree for the pipeline')
-    parser.add_argument('-p','--packages', action='store_true', help='Install all necessary packages')
     parser.add_argument('-c','--clean', action='store_true', help='Clean raw reads')
     parser.add_argument('-d','--decont', action='store_true', help='Decontamination of raw reads')
     parser.add_argument('-i','--hisat', action='store_true', help='Run Hisat')
@@ -411,13 +392,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.about:
-        print('Transcriptome assembly pipeline - version: 1.3')
+        print('Transcriptome assembly pipeline - version: 1.0')
 
     if args.folders:
         call_directory()
-
-    if args.packages:
-        call_install_packages()
 
     if args.clean:
         call_clean()
