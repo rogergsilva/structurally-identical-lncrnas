@@ -35,7 +35,7 @@ Follow the Usage steps on https://bioconda.github.io/
 
 The following python libraries must be installed on your machine:
 ```shell
-  conda install statistics,biopython
+  conda install statistics, biopython
 ```
 
 ### Step 4: Create a folder for your project in your computer
@@ -55,7 +55,7 @@ Open a command line terminal, change the path to the folder PRJ123 and execute t
 cd PRJ123
 python identical.py -t /home/user/ALL_merged_track.tracking -f /home/user/ALL_merged_track.fasta -l /home/user/lncrna_ids.txt
 ```
-This command will create a output.csv file in the current directory
+This command will create a output.csv file in the current directory.
 
 # Bugs
 Do you have an issue? Please file it on :https://github.com/rogergsilva/structurally-identical-lncrnas/issues
