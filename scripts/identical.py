@@ -185,7 +185,6 @@ def file_exists(filepath):
 def parse_arguments():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Identify structurally identical transcripts.")
-    parser.add_argument('-v', '--verbose', action='store_true', help='Increase output verbosity')
     # putative lncRNA file - containing the IDs of all putative lncRNAs
     parser.add_argument('-l', '--lncRNA', type=file_exists, help='LncRNA file containing FASTA IDs')
     # Tracking File argument
@@ -198,28 +197,6 @@ def parse_arguments():
     args = parser.parse_args()
     return args
 
-
-def parse_arguments():
-    """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(description="A template for a Python script.")
-    
-    # Positional argument
-    parser.add_argument('input', type=str, help='Input file or directory')
-    # Optional argument with default value
-    parser.add_argument('-o', '--output', type=str, default='output.txt', help='Output file (default: output.txt)')
-    # Flag (store_true)
-    parser.add_argument('-v', '--verbose', action='store_true', help='Increase output verbosity')
-    # Optional argument with choices
-    parser.add_argument('-m', '--mode', type=str, choices=['copy', 'move', 'delete'], default='copy', help='Operation mode (default: copy)')
-    # Optional integer argument
-    parser.add_argument('-n', '--number', type=int, default=1, help='Number of times to repeat the operation (default: 1)')
-    # Optional argument for logging level
-    parser.add_argument('-l', '--log', type=str, choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'], default='INFO', help='Set the logging level (default: INFO)')
-    # File argument (required)
-    parser.add_argument('file', type=argparse.FileType('r'), help='File to be processed')
-    
-    args = parser.parse_args()
-    return args
 
 def main():
     """ Main function """
