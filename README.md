@@ -60,6 +60,7 @@ cd PRJ123
 python identical.py -t /home/user/ALL_merged_track.tracking
                     -f /home/user/ALL_merged_track.fasta
                     -l /home/user/lncrna_ids.txt
+                    -g [1,2,3][4,5,6]
 ```
 
 All the options
@@ -95,6 +96,7 @@ All files used in this example can be found in the folder test.
 python identical.py -t test/ALL_merged_track.tracking
                     -f test/ALL_merged_track.fasta
                     -l test/lncrna_ids.txt
+                    -g [1,2,3][4,5,6]
 ```
 
 # Bugs
