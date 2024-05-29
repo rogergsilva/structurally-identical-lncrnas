@@ -41,7 +41,7 @@ def get_info(_group=[], _count=3):
     
     return None
 
-# Without validation!
+# Transcripts without validation
 def get_tracking(_tracking_file, _code=['u','i','x','='], _group={}, _exp=3):
     # Keys:
     #   tracking file - it is the stringtie file
@@ -110,7 +110,7 @@ def get_only_transcripts(tmp, typ):
     return dic
 
 # return locus from a transfrag
-def get_locus(trans):
+def get_locus(trans, all_transcripts):
     for k, _ in all_transcripts.items():
         if trans in k:
             return k[1]
@@ -143,15 +143,21 @@ def get_validated_symbols_temp():
     return tmp
 
 
-# Read the tracking transcritps into a dict of biopython sequences
-with open(OUTDIR + '/stringTie/track/ALL_merged_track.fasta') as tmp:
-    seq_dic = SeqIO.to_dict(SeqIO.parse(tmp, "fasta"))
+def get_validated():
+    for each in ['u','i','x','=']:
+        print(each, count_transcript(get_validated()[each], each))
+
+# Read the tracking transcritps into a dict of biopython sequences - valid transcripts
+def get_fasta():
+    with open(WORK_DIR + '/stringTie/track/ALL_merged_track.fasta') as tmp:
+        seq_dic = SeqIO.to_dict(SeqIO.parse(tmp, "fasta"))
+    return seq_dic
 
 # Get validated transcripts after Blastx, InterProScan and CPC2 - only unique transcripts
-def get_validated():
-    put_lnc_anti = [x.strip() for x in open(OUTDIR + '/lncrna/antisense_putative_lncrnas_ids')]
-    put_lnc_inter = [x.strip() for x in open(OUTDIR + '/lncrna/intergenic_putative_lncrnas_ids')]
-    put_lnc_intra = [x.strip() for x in open(OUTDIR + '/lncrna/intragenic_putative_lncrnas_ids')]
+def get_validated(all_transcripts):
+    put_lnc_anti = [x.strip() for x in open(WORK_DIR + '/lncrna/antisense_putative_lncrnas_ids')]
+    put_lnc_inter = [x.strip() for x in open(WORK_DIR + '/lncrna/intergenic_putative_lncrnas_ids')]
+    put_lnc_intra = [x.strip() for x in open(WORK_DIR + '/lncrna/intragenic_putative_lncrnas_ids')]
 
     dic_inter = get_only_transcripts(all_transcripts, 'u')
     dic_antis = get_only_transcripts(all_transcripts, 'x')
@@ -176,6 +182,10 @@ def get_validated():
 
     return {'=':dic_mrna, 'u': dic_inter_tmp, 'x': dic_antis_tmp, 'i': dic_intra_tmp}
 
+def save_output():
+    None
+
+
 def file_exists(filepath):
     """Check if the file exists and return the file path if it does."""
     if not os.path.isfile(filepath):
@@ -186,14 +196,17 @@ def parse_arguments():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Identify structurally identical transcripts.")
     # putative lncRNA file - containing the IDs of all putative lncRNAs
-    parser.add_argument('-l', '--lncRNA', type=file_exists, help='LncRNA file containing FASTA IDs')
+    parser.add_argument('-l', '--lncRNA', type=file_exists, help='File containing only lncRNA transfrag IDs')
     # Tracking File argument
     parser.add_argument('-t', '--tracking', type=file_exists, help='Tracking file from StringTie2 output to be read')
     # Fasta File argument
     parser.add_argument('-f', '--fasta', type=file_exists, help='Fasta file from StringTie2 output to be used to save identical transcripts')
     # Output csv file
     parser.add_argument('-o', '--output', type=str, default='output.csv', help='Output file (default: output.csv)')
-
+    # Groups [q1,q2,q3][q4,q5,q6]
+    # it will name ex1, ex2, ex3 according to the total of brackets
+    parser.add_argument('-g', '--groups', type=str, help='Group your samples in the same order they were processed by StringTie')
+    # it will return all identical mRNAs
     args = parser.parse_args()
     return args
 
@@ -203,9 +216,10 @@ def main():
     # Parse command-line arguments
     args = parse_arguments()
 
-
-    group = {'35':[3,4,5],'40':[6,7,8], '45':[9,10,11], '50':[1,2,12]}
-    all_transcripts = get_tracking(_group=group, _exp=3)
+    group = {'g1':[1,2,3],'g2':[4,5,6]}
+    # _tracking_file, _code=['u','i','x','='], _group={}, _exp=3
+    all_transcripts = get_tracking(args.tracking, _group=group, _exp=3)
+    print(all_transcripts)
 
 
     
