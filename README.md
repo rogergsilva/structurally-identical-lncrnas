@@ -57,32 +57,24 @@ For example, save it in the folder PRJ123.
 Open a command line terminal, change the path to the folder PRJ123 and execute the following command:
 ```shell
 cd PRJ123
-python identical.py -t /home/user/ALL_merged_track.tracking
-                    -f /home/user/ALL_merged_track.fasta
-                    -l /home/user/lncrna_ids.txt
-                    -g [1,2,3][4,5,6]
-```
-
-All the options
-```shell
 python identical.py -h
-usage: identical.py [-h] [-l LNCRNA] [-t TRACKING] [-f FASTA] [-o OUTPUT] [-g GROUPS]
+usage: identical.py [-h] [-i IDS] -m MOLECULES -g GROUPS [-t TRACKING] [-f FASTA] [-o OUTPUT]
 
 Identify structurally identical transcripts.
 
 options:
   -h, --help            show this help message and exit
-  -l LNCRNA, --lncRNA LNCRNA
-                        File containing only lncRNA transfrag IDs
+  -i IDS, --ids IDS     File containing only transfrag IDs that were previsouly checked - putative transcripts
+  -m MOLECULES, --molecules MOLECULES
+                        Which molecules will be selected to be analyzed
+  -g GROUPS, --groups GROUPS
+                        Group your samples in the same order they were processed by StringTie
   -t TRACKING, --tracking TRACKING
                         Tracking file from StringTie2 output to be read
   -f FASTA, --fasta FASTA
-                        Fasta file from StringTie2 output to be used to save identical transcripts
+                        Fasta file from StringTie2 output to be used to save identical transcripts fasta file
   -o OUTPUT, --output OUTPUT
                         Output file (default: output.csv)
-  -g GROUPS, --groups GROUPS
-                        Group your samples in the same order they were processed by StringTie
-
 ```
 This command will create an output.csv file in the current directory.
 
@@ -96,7 +88,8 @@ All files used in this example can be found in the folder test.
 python identical.py -t test/ALL_merged_track.tracking
                     -f test/ALL_merged_track.fasta
                     -l test/lncrna_ids.txt
-                    -g [1,2,3][4,5,6]
+                    -m [x,i,u,=]
+                    -g g1:[1,2,3]/g2:[4,5,6]
 ```
 
 # Bugs

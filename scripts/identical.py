@@ -154,7 +154,8 @@ def get_fasta():
     return seq_dic
 
 # Get validated transcripts after Blastx, InterProScan and CPC2 - only unique transcripts
-def get_validated(all_transcripts):
+def get_validated(all_transcripts, ids):
+    # Check in the file for x,i,u and = transcripts
     put_lnc_anti = [x.strip() for x in open(WORK_DIR + '/lncrna/antisense_putative_lncrnas_ids')]
     put_lnc_inter = [x.strip() for x in open(WORK_DIR + '/lncrna/intergenic_putative_lncrnas_ids')]
     put_lnc_intra = [x.strip() for x in open(WORK_DIR + '/lncrna/intragenic_putative_lncrnas_ids')]
@@ -192,20 +193,56 @@ def file_exists(filepath):
         raise argparse.ArgumentTypeError(f"The file {filepath} does not exist. Please, verify!")
     return filepath
 
+def check_molecules(lst):
+    """Check the transcript classification codes"""
+    stringtie_elements = ['=','c','k','m','n','j','e','o','s','x','i','y','p','r','u']
+    elements = lst.strip('[]').split(',')
+    result = [element.strip() for element in elements]
+    if not all(item in stringtie_elements for item in result):
+        raise argparse.ArgumentTypeError(f"The following element(s) were not recognized: {set(result) - set(stringtie_elements)}. Please, verify!")
+    return result
+
+def parse_groups(grs):
+    import json
+    try:
+        return json.loads(grs)
+    except json.JSONDecodeError as e:
+        raise argparse.ArgumentTypeError(f"Invalid element(s): {e}")
+    
+def check_groups(grs):
+    try:
+        items = grs.split('/')
+        result = {}
+        for item in items:
+            key, value = item.split(':')
+            print(key,value)
+            key = key.strip()
+            value = list(value.strip('[]').replace(',', ''))
+            result[key] = value
+        return result
+    except Exception as e:
+        raise argparse.ArgumentTypeError(f"Error parsing input string: {e}")    
+    
+
 def parse_arguments():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Identify structurally identical transcripts.")
     # putative lncRNA file - containing the IDs of all putative lncRNAs
-    parser.add_argument('-l', '--lncRNA', type=file_exists, help='File containing only lncRNA transfrag IDs')
+    parser.add_argument('-i', '--ids', type=file_exists, help='File containing only transfrag IDs that were previsouly checked - putative transcripts')
+    
+    # Transcripts default [u,i,x,=]
+    parser.add_argument('-m', '--molecules', type=check_molecules, required=True, default=['u','x','i','='], help='Which molecules will be selected to be analyzed')
+    
+    # Groups [q1,q2,q3][q4,q5,q6]
+    # it will name ex1, ex2, ex3 according to the total of brackets
+    parser.add_argument('-g', '--groups', type=check_groups, required=True, help='Group your samples in the same order they were processed by StringTie')
+
     # Tracking File argument
     parser.add_argument('-t', '--tracking', type=file_exists, help='Tracking file from StringTie2 output to be read')
     # Fasta File argument
-    parser.add_argument('-f', '--fasta', type=file_exists, help='Fasta file from StringTie2 output to be used to save identical transcripts')
+    parser.add_argument('-f', '--fasta', type=file_exists, help='Fasta file from StringTie2 output to be used to save identical transcripts fasta file')
     # Output csv file
     parser.add_argument('-o', '--output', type=str, default='output.csv', help='Output file (default: output.csv)')
-    # Groups [q1,q2,q3][q4,q5,q6]
-    # it will name ex1, ex2, ex3 according to the total of brackets
-    parser.add_argument('-g', '--groups', type=str, help='Group your samples in the same order they were processed by StringTie')
     # it will return all identical mRNAs
     args = parser.parse_args()
     return args
@@ -215,11 +252,13 @@ def main():
     """ Main function """
     # Parse command-line arguments
     args = parse_arguments()
+    print(args.molecules)
+    print(args.groups)
 
     group = {'g1':[1,2,3],'g2':[4,5,6]}
     # _tracking_file, _code=['u','i','x','='], _group={}, _exp=3
-    all_transcripts = get_tracking(args.tracking, _group=group, _exp=3)
-    print(all_transcripts)
+    #all_transcripts = get_tracking(args.tracking, _group=group, _exp=3)
+    #print(all_transcripts)
 
 
     
