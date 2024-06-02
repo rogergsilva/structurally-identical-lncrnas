@@ -138,7 +138,8 @@ TCONS_00000034
 TCONS_00000035
 ```
 
-- ```shell
+- Groups
+```shell
 g1:[1,2,3]/g2:[4,5,6]
 ```
 The g1 and g2 refer to the number of experiments you have performed using StringTie2. In this case, there are two experiments: control and treatment. Each experiment has 3 replicates, numbered 1, 2, and 3.
