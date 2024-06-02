@@ -120,11 +120,11 @@ TATGGAGGTAATGCACGAACGTAATGCTCACAACTTCCCTCTAGACCTAGCTGCTCTTGAAGTTCCTTAC
 CTTAATGGATAA
 ```
 
-- GFF compare symbols:
+- GFF compare transfag class codes:
 <p align="center">
-  <img src="https://ccb.jhu.edu/software/stringtie/gffcompare_codes.png" width="250" alt="From GFF compare tool">
+  <img src="https://ccb.jhu.edu/software/stringtie/gffcompare_codes.png" width="350" alt="From GFF compare tool">
 </p>
-https://ccb.jhu.edu/software/stringtie/gffcompare.shtml
+https://ccb.jhu.edu/software/stringtie/gffcompare.shtml#transfrag-class-codes
 
 - lncrna_ids.txt content:
 ```shell
