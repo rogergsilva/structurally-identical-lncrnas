@@ -121,11 +121,11 @@ CTTAATGGATAA
 ```
 
 - GFF compare symbols:
-```shell
-https://ccb.jhu.edu/software/stringtie/gffcompare_codes.png
+<p align="center">
+  <img src="https://ccb.jhu.edu/software/stringtie/gffcompare_codes.png" width="250" alt="From GFF compare tool">
+</p>
+https://ccb.jhu.edu/software/stringtie/gffcompare.shtml
 
-from: https://ccb.jhu.edu/software/stringtie/gffcompare.shtml
-```
 - lncrna_ids.txt content:
 ```shell
 TCONS_00000016
@@ -138,9 +138,10 @@ TCONS_00000034
 TCONS_00000035
 ```
 
-- g1:[1,2,3]/g2:[4,5,6] meaning:
-The g1 and g2 mean the number of experiments you have perfomerd using StringTie2. In this case, there are two experiments, like: control and treatment.
-Each experiment has 3 replicates in this order 1,2,3.
+- ```shell
+g1:[1,2,3]/g2:[4,5,6]
+```
+The g1 and g2 refer to the number of experiments you have performed using StringTie2. In this case, there are two experiments: control and treatment. Each experiment has 3 replicates, numbered 1, 2, and 3.
 
 # Bugs
 Do you have an issue? Please file it on :https://github.com/rogergsilva/structurally-identical-lncrnas/issues
