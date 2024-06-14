@@ -386,6 +386,14 @@ if __name__ == "__main__":
     parser.add_argument('-b','--about', action='store_true', help='Execute the pipeline for the first time')
 
 
+    # Create subparsers
+    subparsers = parser.add_subparsers(dest='command')
+    # Subparser for the 'clean' command
+    clean_parser = subparsers.add_parser('clean', help='Clean all raw reads using bbmap tool')
+    clean_parser.add_argument('-n', '--number', type=int, default=1, help='Number of reads to clean')
+    clean_parser.add_argument('-help', action='help', help='Show this help message and exit')
+
+
     args = parser.parse_args()
 
     if args.about:
